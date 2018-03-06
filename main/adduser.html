@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>사용자 추가</title>
+	<script src="js/jquery-3.3.1.js"></script>
+	<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<br><br>
+<h3>사용자 등록 페이지</h3>
+<br><br>
+
+<form method="post" action="/addUser">
+	<table>
+		<tr>
+			<td width="40">ID</td>
+			<td><input type="text" name="id" id="id" class="inputText"></td>
+		</tr>
+		<tr>
+			<td>PASS</td>
+			<td><input type="password" name="password" id="password" class="inputText"></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<input type="submit" class="inputBtn" value="사용자 등록">
+			</td>
+		</tr>
+	</table>
+</form>
+</body>
+</html>

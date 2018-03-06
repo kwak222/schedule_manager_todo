@@ -1,6 +1,7 @@
 const config = require( './resource/config' );
 const express = require( 'express' );
 const app = express();
+const path = require( 'path' );
 
 // post 파서모듈
 const bodyParser = require( 'body-parser' );
@@ -12,6 +13,11 @@ const DB = new dbManager( config.dbUrl );
 // USER 메니저
 const userManager = require( './resource/userManager' );
 const user = new userManager( DB );
+const todoManager = require( './resource/todoManager' );
+const todo = new todoManager( DB );
+
+// id정보
+const userInfo={id:''};
 
 // 프로세스 종료 시
 process.on( 'SIGTERM', function () {
@@ -49,11 +55,12 @@ let message = ( err, data, cat ) => {
 		html += '<br>사용자 ID : ' + data.id;
 		html += '<br>Password : ' + data.password;
 	}
-	html += '<br><a href="/index.html">사용자 등록</a>';
+	html += '<br><a href="/adduser.html">사용자 등록</a>';
 	html += '<br><a href="/index.html">로그인</a>';
 	return html;
 };
 
+// 사용자 추가
 router.post( '/addUser', ( req, res, next ) => {
 	let id = req.body.id;
 	let password = req.body.password;
@@ -63,11 +70,74 @@ router.post( '/addUser', ( req, res, next ) => {
 	} );
 } );
 
+// 로그인
 router.post( '/login', ( req, res, next ) => {
 	let id = req.body.id;
 	let password = req.body.password;
 	user.login( { id : id, password : password }, ( err, data ) => {
-		res.send( message( err, data, '로그인' ) );
+		let success = true;
+		if(err) {
+			success = false;
+		}
+		userInfo.id = id;
+		res.send( {success: success, data: data} );
+		next();
+	} );
+} );
+
+// todo항목 추가
+router.post( '/todoAdd', (req, res, next )  => {
+	let content = req.body.content;
+	let status = req.body.status;
+	let paramObj = { id : userInfo.id, content : content, status: status };
+	todo.add ( paramObj, ( err, data ) => {
+		let success = true;
+		if(err) {
+			success = false;
+		}
+		res.send( {success:success} );
+		next();
+	} );
+} );
+
+// todo항목 조회
+router.post( '/todoSelectList', (req, res, next )  => {
+	let status = req.body.status;
+	let paramObj = { id : userInfo.id, status : status };
+	todo.select ( paramObj, ( err, data ) => {
+		let success = true;
+		if(err) {
+			success = false;
+		}
+		res.send( {success:success, data: data} );
+		next();
+	} );
+} );
+
+// todo항목 delete
+router.post( '/todoDeleteOne', (req, res, next )  => {
+	let _id = req.body._id;
+	let status = req.body.status;
+	todo.delete ( { _id : _id, id: userInfo.id }, ( err, data ) => {
+		let success = true;
+		if(err) {
+			success = false;
+		}
+		res.send( {success:success} );
+		next();
+	} );
+} );
+
+// todo항목 update
+router.post( '/todoUpdate', (req, res, next )  => {
+	let _id = req.body._id;
+	let status = req.body.status;
+	todo.update ( { _id : _id, status: status, id: userInfo.id }, ( err, data ) => {
+		let success = true;
+		if(err) {
+			success = false;
+		}
+		res.send( { success : success } );
 		next();
 	} );
 } );
@@ -83,12 +153,3 @@ app.listen( config.port, () => {
 	// 데이터베이스 연결
 	DB.connect();
 } );
-
-/*
-const http = require('http');
-http.createServer((request, response) => {
-	response.write("Hello, this is dog.");
-}).listen(3000);
-
-console.log('Listening on port 3000...');
-*/

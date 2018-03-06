@@ -2,33 +2,76 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>TODO</title>
-	<!--lib-->
+	<title>사용자 로그인</title>
 	<script src="./lib/jquery-3.3.1.js"></script>
-
-	<!--source-->
-	<script src="./src/todo.js"></script>
-
-	<!--css-->
 	<link rel="stylesheet" href="css/main.css">
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$("#loginBtn").click(function() {
+				login();
+			});
+		});
+
+		//로그인
+		function login() {
+			let loginData = $("#loginform").serializeArray();
+
+			//login 정보를 객체 형태로 set
+			let postData = {};
+			for( let key in loginData ) {
+				postData[loginData[key].name] = loginData[key].value;
+			}
+
+			//id null 체크
+			if( postData.id === '' ) {
+				alert( '아이디를 입력하세요.' ); return;
+			}
+			if( postData.password === '' ) {
+				alert( '비밀번호를 입력하세요.' ); return;
+			}
+
+			$.ajax({
+				url:'/login',
+				dataType: 'json',
+				type: 'POST',
+				data: postData,
+				success: function(data) {
+					if(data.success){
+						location.href = 'todo.html';
+					}
+					if(!data.success) {
+						alert("로그인 실패");
+					}
+				}
+			});
+		}
+	</script>
 </head>
 <body>
-	<label> todo list </label>
-	<table class="todoTable">
-		<tbody>
-			<tr>
-				<td>TODO</td>
-				<td>com</td>
-				<td>del</td>
-			</tr>
-		</tbody>
-	</table>
+<br><br>
+<h3>사용자 로그인 페이지</h3>
+<br><br>
 
-<!--template-->
-	<tr class="trTemplate">
-		<td>1</td>
-		<td>2</td>
-		<td>3</td>
-	</tr>>
+<form id="loginform">
+	<table>
+		<tr>
+			<td width="40">ID</td>
+			<td><input type="text" name="id" id="id" class="inputText"></td>
+		</tr>
+		<tr>
+			<td>PASS</td>
+			<td><input type="password" name="password" id="password" class="inputText"></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<input type="button" id="loginBtn" class="inputBtn" value="로그인">
+				<input type="button" class="inputBtn" value="사용자 등록" onclick="location.href='adduser.html'">
+			</td>
+		</tr>
+	</table>
+</form>
+
 </body>
 </html>

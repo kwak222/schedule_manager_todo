@@ -36,6 +36,13 @@ let userManager = class {
 					return;
 				}
 				let user = results[ 0 ];
+				// 사용자 정보 조회
+				if( user === undefined ) {
+					callback( true );
+					console.log( data.id + '사용자 로그인 실패' );
+					return;
+				}
+				// 아이디, 패스워드 일치여부 확인
 				if ( user.password === data.password ) {
 					let res = {
 						id       : data.id,
