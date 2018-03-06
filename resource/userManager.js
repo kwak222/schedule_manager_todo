@@ -37,7 +37,7 @@ let userManager = class {
 				}
 				let user = results[ 0 ];
 				// 사용자 정보 조회
-				if( user === undefined ) {
+				if ( user === undefined ) {
 					callback( true );
 					console.log( data.id + '사용자 로그인 실패' );
 					return;

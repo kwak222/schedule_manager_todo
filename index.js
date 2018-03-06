@@ -17,7 +17,7 @@ const todoManager = require( './resource/todoManager' );
 const todo = new todoManager( DB );
 
 // id정보
-const userInfo={id:''};
+const userInfo = { id : '' };
 
 // 프로세스 종료 시
 process.on( 'SIGTERM', function () {
@@ -76,65 +76,65 @@ router.post( '/login', ( req, res, next ) => {
 	let password = req.body.password;
 	user.login( { id : id, password : password }, ( err, data ) => {
 		let success = true;
-		if(err) {
+		if ( err ) {
 			success = false;
 		}
 		userInfo.id = id;
-		res.send( {success: success, data: data} );
+		res.send( { success : success, data : data } );
 		next();
 	} );
 } );
 
 // todo항목 추가
-router.post( '/todoAdd', (req, res, next )  => {
+router.post( '/todoAdd', ( req, res, next ) => {
 	let content = req.body.content;
 	let status = req.body.status;
-	let paramObj = { id : userInfo.id, content : content, status: status };
-	todo.add ( paramObj, ( err, data ) => {
+	let paramObj = { id : userInfo.id, content : content, status : status };
+	todo.add( paramObj, ( err, data ) => {
 		let success = true;
-		if(err) {
+		if ( err ) {
 			success = false;
 		}
-		res.send( {success:success} );
+		res.send( { success : success } );
 		next();
 	} );
 } );
 
 // todo항목 조회
-router.post( '/todoSelectList', (req, res, next )  => {
+router.post( '/todoSelectList', ( req, res, next ) => {
 	let status = req.body.status;
 	let paramObj = { id : userInfo.id, status : status };
-	todo.select ( paramObj, ( err, data ) => {
+	todo.select( paramObj, ( err, data ) => {
 		let success = true;
-		if(err) {
+		if ( err ) {
 			success = false;
 		}
-		res.send( {success:success, data: data} );
+		res.send( { success : success, data : data } );
 		next();
 	} );
 } );
 
 // todo항목 delete
-router.post( '/todoDeleteOne', (req, res, next )  => {
+router.post( '/todoDeleteOne', ( req, res, next ) => {
 	let _id = req.body._id;
 	let status = req.body.status;
-	todo.delete ( { _id : _id, id: userInfo.id }, ( err, data ) => {
+	todo.delete( { _id : _id, id : userInfo.id }, ( err, data ) => {
 		let success = true;
-		if(err) {
+		if ( err ) {
 			success = false;
 		}
-		res.send( {success:success} );
+		res.send( { success : success } );
 		next();
 	} );
 } );
 
 // todo항목 update
-router.post( '/todoUpdate', (req, res, next )  => {
+router.post( '/todoUpdate', ( req, res, next ) => {
 	let _id = req.body._id;
 	let status = req.body.status;
-	todo.update ( { _id : _id, status: status, id: userInfo.id }, ( err, data ) => {
+	todo.update( { _id : _id, status : status, id : userInfo.id }, ( err, data ) => {
 		let success = true;
-		if(err) {
+		if ( err ) {
 			success = false;
 		}
 		res.send( { success : success } );

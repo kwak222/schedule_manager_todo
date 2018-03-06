@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>TODO</title>
+	<link rel="stylesheet" href="css/main.css">
 	<script src="./lib/jquery-3.3.1.js"></script>
 	<style type="text/css">
 		.todoTable {
@@ -21,10 +22,10 @@
 			} );
 
 			// 완료, 삭제 btn click
-			$( '#todoList tbody' ).click( function (e) {
-				let type = $(e.target).attr('type');
-				let _id = $(e.target).parent('tr').attr('_id');
-				if( type === 'com' ) {
+			$( '#todoList tbody' ).click( function ( e ) {
+				let type = $( e.target ).attr( 'type' );
+				let _id = $( e.target ).parent( 'tr' ).attr( '_id' );
+				if ( type === 'com' ) {
 					todoComplete( _id );
 				} else if ( type === 'del' ) {
 					todoDelete( _id );
@@ -32,22 +33,22 @@
 			} );
 
 			// 콤보 선택에 따라 목록 재조회
-			$("#todoTypeCombo").change(function () {
-				let $todoTypeCombo = $("#todoTypeCombo").val();
-				if($todoTypeCombo === 'todo') {
+			$( "#todoTypeCombo" ).change( function () {
+				let $todoTypeCombo = $( "#todoTypeCombo" ).val();
+				if ( $todoTypeCombo === 'todo' ) {
 					todoSelect( $todoTypeCombo );
-					$(".completeTd").show();
-				} else if ($todoTypeCombo === 'complete') {
+					$( ".completeTd" ).show();
+				} else if ( $todoTypeCombo === 'complete' ) {
 					todoSelect( $todoTypeCombo );
-					$(".completeTd").hide();
+					$( ".completeTd" ).hide();
 
 				}
-			});
+			} );
 		} );
 
 		//todo목록에 추가
 		function todoAdd() {
-			if(!confirm( '추가하시겠습니까?' )) return;
+			if ( !confirm( '추가하시겠습니까?' ) ) return;
 
 
 			//validation
@@ -65,11 +66,11 @@
 				success  : function ( result ) {
 					if ( result.success ) {
 						// 콤보값 가져오기
-						let status = $('#todoTypeCombo').val();
+						let status = $( '#todoTypeCombo' ).val();
 						// 목록재조회
 						todoSelect( status );
 						//input reset
-						$( "#todoContent" ).val('');
+						$( "#todoContent" ).val( '' );
 					}
 				}
 			} );
@@ -94,7 +95,7 @@
 
 		// todo항목 삭제
 		function todoDelete( _id ) {
-			if(!confirm( '삭제하시겠습니까?' )) return;
+			if ( !confirm( '삭제하시겠습니까?' ) ) return;
 
 			$.ajax( {
 				url      : '/todoDeleteOne',
@@ -104,7 +105,7 @@
 				success  : function ( result ) {
 					if ( result.success ) {
 						// 콤보값 가져오기
-						let status = $('#todoTypeCombo').val();
+						let status = $( '#todoTypeCombo' ).val();
 						// 목록재조회
 						todoSelect( status );
 					}
@@ -114,7 +115,7 @@
 
 		// todo항목 완료
 		function todoComplete( _id ) {
-			if(!confirm( '완료하시겠습니까?' )) return;
+			if ( !confirm( '완료하시겠습니까?' ) ) return;
 
 			$.ajax( {
 				url      : '/todoUpdate',
@@ -124,7 +125,7 @@
 				success  : function ( result ) {
 					if ( result.success ) {
 						// 콤보값 가져오기
-						let status = $('#todoTypeCombo').val();
+						let status = $( '#todoTypeCombo' ).val();
 						// 목록재조회
 						todoSelect( status );
 					}
@@ -154,33 +155,43 @@
 	</script>
 </head>
 <body>
-<span> todo list </span>
-<select id="todoTypeCombo">
-	<option value="todo" selected>TODO</option>
-	<option value="complete">COMPLETE</option>
-</select>
-<table class="todoTable" id="todoList">
+<div class="table-title textCenter"><h1> TODO LIST </h1></div>
+<div class="table-title">
+	<section class="container">
+		<div class="dropdown dropdown-dark">
+			<select class="dropdown-select" id="todoTypeCombo">
+				<option value="todo" selected>TODO</option>
+				<option value="complete">COMPLETE</option>
+			</select>
+		</div>
+	</section>
+</div>
+
+
+<table class="todoTable table-fill" id="todoList">
 	<thead>
-		<tr>
-			<td class="content">CONTENT</td>
-			<td class="completeTd">com</td>
-			<td class="deleteTd">del</td>
-		</tr>
+	<tr>
+		<th class="content">CONTENT</th>
+		<th class="completeTd">com</th>
+		<th class="deleteTd">del</th>
+	</tr>
 	</thead>
 	<tbody>
 	</tbody>
 </table>
 
-<input type="text" id="todoContent" class="inputText" value="">
-<input type="button" id="todoBtn" class="inputBtn" value="TODO">
+<div class="divCenter textCenter">
+	<input type="text" id="todoContent" class="inputText form__field" value="">
+	<input type="button" id="todoBtn" class="inputBtn btn btn--primary btn--inside uppercase" value="TODO">
+</div>
 
 <!--template start-->
 <table>
 	<tbody>
 	<tr class="trTemplate" style="display: none">
 		<td class="content"></td>
-		<td class="completeTd" type="com">완성</td>
-		<td class="deleteTd" type="del">삭제</td>
+		<td class="completeTd completeBtn" type="com"></td>
+		<td class="deleteTd delBtn" type="del"></td>
 	</tr>
 	</tbody>
 </table>

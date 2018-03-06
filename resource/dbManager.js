@@ -67,7 +67,7 @@ let dbManager = class {
 			// sortOrd    : { type : String, required : true, 'default' : '' },
 			content    : { type : String, required : true, 'default' : '' },
 			status     : { type : String, required : true, 'default' : '' },
-			date       : { type : Date, required : true, default: Date.now }
+			date       : { type : Date, required : true, default : Date.now }
 		} );
 
 		// 자동증가 플러그인. 자동증가로 num 칼럼 추가
@@ -76,7 +76,7 @@ let dbManager = class {
 		// 스키마에 static 으로 findById 메소드 추가
 		_this.schema.todo
 			.static( 'findById', function ( data, callback ) {
-				return this.find( { id : data.id, status: data.status }, callback );
+				return this.find( { id : data.id, status : data.status }, callback );
 			} );
 
 		console.log( 'schema.todo 정의함.' );
